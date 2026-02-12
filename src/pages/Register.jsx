@@ -2,11 +2,20 @@ import axios from "axios";
 import { useState } from "react"
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { registerValidator } from "../validators/registerValidator";
 
 
 export default function Register(){
-    const[formData, setFormData] = useState([])
+    const[formData, setFormData] = useState({
+        username: "",
+        password: "",
+        email: "",
+        phone: "",
+    })
     const inputStyle = "border w-full rounded-md px-2"
+
+    const [error , setError] = useState(null)
+    
     const navigate = useNavigate()
     
     const hdlChange = (e)=> {
@@ -16,16 +25,25 @@ export default function Register(){
     }
     const hdlSubmit = async (e)=>{
         e.preventDefault();
-        try {
-            const res = await axios.post("https://jsonplaceholder.typicode.com/posts",formData);
-            console.log('Register successfully', res.data);
-            toast.success("ลงทะเบียนสำเร็จ")
-            navigate('/post')
-        } catch (error) {
-            console.log('ERROR')
+        setError({});
+        const result = registerValidator.safeParse(formData)
+        if (!result.success){
+            const {fieldErrors} = result.error.flatten()
+            console.log(fieldErrors)
+            setError(fieldErrors)
+            return;
         }
+        // try {
+        //     const res = await axios.post("https://jsonplaceholder.typicode.com/posts",formData);
+        //     console.log('Register successfully', res.data);
+        //     toast.success("ลงทะเบียนสำเร็จ")
+        //     navigate('/post')
+        // } catch (error) {
+        //     console.log('ERROR')
+        // }
     }
  
+    // console.log("error",error)
     return(
         <div className="min-h-screen bg-gray-200 flex justify-center p-5">
             <form onSubmit={hdlSubmit}
@@ -33,15 +51,19 @@ export default function Register(){
                 <h2 className="font-bold mb-2">Create account</h2>
                 <label>Username:
                     <input type="text" name="username" placeholder="username" className={inputStyle} onChange={hdlChange}/>
+                    {error?.username && <p className="text-red-600 text-[12px]">{error?.username[0]}</p>}
                 </label>
                 <label>Password:
                     <input type="password" name="password" placeholder="password" className={inputStyle} onChange={hdlChange} />
+                    {error?.password && <p className="text-red-600 text-[12px]">{error?.password[0]}</p>}
                 </label>
                 <label>Email:
-                    <input type="email" name="email" placeholder="example@mail.com" className={inputStyle} onChange={hdlChange} />
+                    <input type="text" name="email" placeholder="example@mail.com" className={inputStyle} onChange={hdlChange} />
+                    {error?.email && <p className="text-red-600 text-[12px]">{error?.email[0]}</p>}
                 </label>
                 <label>Phone:
                     <input type="text" name="phone" placeholder="081-xxxxxxx" className={inputStyle} onChange={hdlChange} />
+                    {error?.phone && <p className="text-red-600 text-[12px]">{error?.phone[0]}</p>}
                 </label>
                 <button className="bg-gray-500 w-full px-4 py-1 mt-5 text-amber-50 rounded-4xl">Submit</button>
             </form>
