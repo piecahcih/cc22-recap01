@@ -33,14 +33,14 @@ export default function Register(){
             setError(fieldErrors)
             return;
         }
-        // try {
-        //     const res = await axios.post("https://jsonplaceholder.typicode.com/posts",formData);
-        //     console.log('Register successfully', res.data);
-        //     toast.success("ลงทะเบียนสำเร็จ")
-        //     navigate('/post')
-        // } catch (error) {
-        //     console.log('ERROR')
-        // }
+        try {
+            const res = await axios.post("https://jsonplaceholder.typicode.com/posts",formData);
+            console.log('Register successfully', res.data);
+            toast.success("ลงทะเบียนสำเร็จ")
+            navigate('/post')
+        } catch (error) {
+            console.log('ERROR')
+        }
     }
  
     // console.log("error",error)
@@ -50,19 +50,23 @@ export default function Register(){
             className="bg-white flex flex-col justify-center gap-2 py-5 px-8 mt-20 rounded-3xl h-fit ">
                 <h2 className="font-bold mb-2">Create account</h2>
                 <label>Username:
-                    <input type="text" name="username" placeholder="username" className={inputStyle} onChange={hdlChange}/>
+                    <input type="text" name="username" placeholder="username" className={inputStyle} 
+                    onChange={hdlChange} value={formData.username}/>
                     {error?.username && <p className="text-red-600 text-[12px]">{error?.username[0]}</p>}
                 </label>
                 <label>Password:
-                    <input type="password" name="password" placeholder="password" className={inputStyle} onChange={hdlChange} />
+                    <input type="password" name="password" placeholder="password" className={inputStyle} 
+                    onChange={hdlChange} value={formData.password} />
                     {error?.password && <p className="text-red-600 text-[12px]">{error?.password[0]}</p>}
                 </label>
                 <label>Email:
-                    <input type="text" name="email" placeholder="example@mail.com" className={inputStyle} onChange={hdlChange} />
+                    <input type="text" name="email" placeholder="example@mail.com" className={inputStyle} 
+                    onChange={hdlChange} value={formData.email}/>
                     {error?.email && <p className="text-red-600 text-[12px]">{error?.email[0]}</p>}
                 </label>
                 <label>Phone:
-                    <input type="text" name="phone" placeholder="081-xxxxxxx" className={inputStyle} onChange={hdlChange} />
+                    <input type="text" name="phone" placeholder="081-xxxxxxx" className={inputStyle} 
+                    onChange={hdlChange} value={formData.phone}/>
                     {error?.phone && <p className="text-red-600 text-[12px]">{error?.phone[0]}</p>}
                 </label>
                 <button className="bg-gray-500 w-full px-4 py-1 mt-5 text-amber-50 rounded-4xl">Submit</button>
